@@ -10,21 +10,34 @@
 		<svg id="main" xmlns="http://www.w3.org/2000/svg">
 		</svg>
 		<!-- <div id="main"></div> -->
-		<div class="controls">
+		<div class="controls zoom-controls">
 			<button onclick="zoom(1.1)">+</button>
 			<button onclick="zoom(0.9)">-</button>
 		</div>
+		<div class="controls play-controls">
+			<button id="button_pause_play" onclick="pause_play(this.id)">&#x23F8;</button>
+		</div>
 		
 		<script>
-			let universe = new Universe(5, 5000);
-			universe.initialize();
+			const displayFrequency = 50;
+			const physicsFrequency = 50e3;
+			const universeSize = 5000;
 			
-			//for(i = 0; i < 10000; i++) {
-				//universe.next();
-				setInterval(function() {
-					universe.next();
-				}, 20);
-			//}
+			let universe = new Universe(1 / physicsFrequency, 1 / displayFrequency, universeSize);
+			universe.initialize();
+			//console.log(universe);
+			
+			setInterval(function() {
+				const start = Date.now();
+			
+				universe.next();
+				
+				const t = (Date.now() - start) / 1000;
+				const displayF = 1 / t;
+				const physicsF = (physicsFrequency / displayFrequency) / t;
+				console.log("Display : " + displayF + " Hz\nPhysics : " + physicsF + " Hz\nPhysics Period : " + universe.physicsPeriod + "\nTotal energy : " + universe.totalEnergy.currentValue);
+				//console.log(universe);
+			}, 1000 / displayFrequency);
 
 		</script>
 	</body>

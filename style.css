@@ -23,10 +23,16 @@ body {
 	position: absolute;
 }
 
-.controls {
+.zoom-controls {
 	position: fixed;
 	bottom: 5px;
 	right: 10px;
+}
+
+.play-controls {
+	position: fixed;
+	bottom: 5px;
+	left: 10px;
 }
 
 .controls > button {
@@ -34,6 +40,6 @@ body {
 	height: 5vmin;
 	margin-top: 5px;
 	margin-bottom: 5px;
-	font-size: 2em;
+	font-size: 1.5em;
 	display: block;
 }

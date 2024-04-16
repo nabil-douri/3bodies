@@ -60,3 +60,16 @@ window.addEventListener("wheel", event => {
 	scale = (1 - event.deltaY * 0.001);
 	zoom(scale);
 });
+
+
+
+function pause_play(caller_id) {
+	universe.paused = ! universe.paused;
+	
+	if(universe.paused == true) {
+		document.getElementById(caller_id).innerHTML = "&#x23F5;";
+	}
+	else {
+		document.getElementById(caller_id).innerHTML = "&#x23F8;";
+	}
+}

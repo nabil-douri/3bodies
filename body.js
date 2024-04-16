@@ -13,19 +13,6 @@ class Vec2D {
 	}
 }
 
-class Interaction {
-	constant = 1;
-	vector;
-	distance;
-	masses;
-	
-	constructor(vector, masses) {
-		this.vector = vector;
-		this.masses = masses;
-		this.distance = vector.distance();
-	}
-}
-
 class Body
 {
 	id;
