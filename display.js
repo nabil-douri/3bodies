@@ -19,9 +19,11 @@ function UniverseToDisplayCoordinates(position)
 function updateOldBodies() {
 	var children = Array.from(document.getElementById("main").children);
 	children.forEach(el => {
-		if(el.style.opacity <= 0)
+		if(el.style.opacity <= 0.01)
 			el.remove();
-		el.style.opacity -= 0.01;
+		el.style.opacity *= 0.98;
+		el.style.filter = "brightness(1)";
+		el.setAttributeNS(null, 'r', 1);
 	});
 }
 
@@ -35,7 +37,7 @@ function plotBody(body) {
 	circle.setAttributeNS(null, 'cx', positionDisplay.x);
 	circle.setAttributeNS(null, 'cy', positionDisplay.y);
 	circle.setAttributeNS(null, 'r', body.radius);
-	circle.setAttributeNS(null, 'style', 'fill: ' + body.color + '; opacity:' + body.opacity + ';' );
+	circle.setAttributeNS(null, 'style', 'fill: ' + body.color + '; opacity:' + body.opacity + ';filter: brightness(2);' );
 	svg.appendChild(circle);
 	
 	// var container = document.getElementById("main");

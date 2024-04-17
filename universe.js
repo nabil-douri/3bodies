@@ -25,9 +25,11 @@ class Universe {
 		// this.bodies.push(new Body("body1", new Vec2D(900, 0), new Vec2D(0, 0.8), 1000, 3, "#E52"));
 		// this.bodies.push(new Body("body2", new Vec2D(-700, 0), new Vec2D(0, -1), 1000, 3, "#5E2"));
 		
-		this.bodies.push(new Body("sun", new Vec2D(0, 0), new Vec2D(0, 0), 10000000, 15, "#EE1"));
-		this.bodies.push(new Body("earth", new Vec2D(800, 0), new Vec2D(0, 100), 50, 3, "#25E"));
-		this.bodies.push(new Body("mars", new Vec2D(-1500, 0), new Vec2D(0, -60), 20, 3, "#E52"));
+		this.bodies.push(new Body("sun", new Vec2D(0, 0), new Vec2D(0, 0), 1000000000, 15, "#EE1"));
+		this.bodies.push(new Body("earth", new Vec2D(800, 0), new Vec2D(0, 1100), 500, 5, "#25E"));
+		this.bodies.push(new Body("mars", new Vec2D(-1300, 0), new Vec2D(0, -800), 200, 3, "#E22"));
+		this.bodies.push(new Body("mercury", new Vec2D(0, -300), new Vec2D(1500, 0), 100, 3, "#999"));
+		this.bodies.push(new Body("jupiter", new Vec2D(0, 2000), new Vec2D(-700, 0), 2000, 8, "#F85"));
 		
 		this.interact();
 		this.plot();
