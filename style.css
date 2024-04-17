@@ -41,10 +41,10 @@ body {
 }
 
 .controls > button {
-	width: 5vmin;
-	height: 5vmin;
+	width: 8vmin;
+	height: 8vmin;
 	margin-top: 5px;
 	margin-bottom: 5px;
-	font-size: 1.5em;
+	font-size: 1.8em;
 	display: block;
 }
