@@ -37,7 +37,7 @@ function plotBody(body) {
 	circle.setAttributeNS(null, 'cx', positionDisplay.x);
 	circle.setAttributeNS(null, 'cy', positionDisplay.y);
 	circle.setAttributeNS(null, 'r', body.radius);
-	circle.setAttributeNS(null, 'style', 'fill: ' + body.color + '; opacity:' + body.opacity + ';filter: brightness(2);' );
+	circle.setAttributeNS(null, 'style', 'fill: ' + body.color + '; opacity:1; filter: brightness(2);' );
 	svg.appendChild(circle);
 	
 	// var container = document.getElementById("main");
@@ -55,6 +55,12 @@ function plotBody(body) {
 }
 
 function zoom(newScale) {
+	// Removes all displayed elements
+	Array.from(document.getElementById("main").children).forEach(el => {
+		el.remove();
+	});
+	
+	// Changes universe size
 	universe.size *= 1 / newScale;
 }
 

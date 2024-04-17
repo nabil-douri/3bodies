@@ -18,20 +18,20 @@ class Body
 	id;
 	position;
 	velocity;
+	acceleration;
 	force;
 	interactions = [];
 	mass;
 	color;
-	opacity;
 	radius;
 	
-	constructor(id, initialPosition, initialVelocity, mass, radius, color) {
+	constructor(id, initialPosition, initialVelocity, initialAcceleration, mass, radius, color) {
 		this.id = id;
 		this.position = initialPosition;
 		this.velocity = initialVelocity;
+		this.acceleration = initialAcceleration;
 		this.mass = mass;
 		this.color = color;
-		this.opacity = 1;
 		this.radius = radius;
 	}
 	
@@ -50,11 +50,10 @@ class Body
 	
 	next(dt) {
 		this.computeForce();
-		var acceleration = new Vec2D(this.force.x / this.mass, this.force.y / this.mass);
-		var newVelocity = new Vec2D(this.velocity.x + acceleration.x * dt, this.velocity.y + acceleration.y * dt);
-		var newPosition = new Vec2D(this.position.x + newVelocity.x * dt, this.position.y + newVelocity.y * dt);
-		this.opacity -= 0.1;
+		var newAcceleration = new Vec2D(this.force.x / this.mass, this.force.y / this.mass);
+		var newVelocity = new Vec2D(this.velocity.x + 1 * (newAcceleration.x) * dt, this.velocity.y + 1 * (newAcceleration.y) * dt);
+		var newPosition = new Vec2D(this.position.x + 1 * (newVelocity.x) * dt, this.position.y + 1 * (newVelocity.y) * dt);
 		
-		return new Body(this.id, newPosition, newVelocity, this.mass, this.radius, this.color);
+		return new Body(this.id, newPosition, newVelocity, newAcceleration, this.mass, this.radius, this.color);
 	}
 }
