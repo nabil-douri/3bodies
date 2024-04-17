@@ -2,7 +2,7 @@
 class Universe {
 	time = 0;
 	physicsPeriod; initialPhysicsPeriod;
-	displayPeriod;
+	physicsLoopPeriod;
 	oldBodies = [];
 	bodies = [];
 	size;
@@ -13,10 +13,10 @@ class Universe {
 	physicsInconsistency = 0.001;
 	paused = false;
 	
-	constructor(physicsPeriod, displayPeriod, size) {
+	constructor(physicsPeriod, physicsLoopPeriod, size) {
 		this.physicsPeriod = physicsPeriod;
 		this.initialPhysicsPeriod = physicsPeriod;
-		this.displayPeriod = displayPeriod;
+		this.physicsLoopPeriod = physicsLoopPeriod;
 		this.size = size;
 	}
 	
@@ -26,10 +26,10 @@ class Universe {
 		// this.bodies.push(new Body("body2", new Vec2D(-700, 0), new Vec2D(0, -1), 1000, 3, "#5E2"));
 		
 		this.bodies.push(new Body("sun", new Vec2D(0, 0), new Vec2D(0, 0), 1000000000, 15, "#EE1"));
-		this.bodies.push(new Body("earth", new Vec2D(800, 0), new Vec2D(0, 1100), 500, 5, "#25E"));
-		this.bodies.push(new Body("mars", new Vec2D(-1300, 0), new Vec2D(0, -800), 200, 3, "#E22"));
-		this.bodies.push(new Body("mercury", new Vec2D(0, -300), new Vec2D(1500, 0), 100, 3, "#999"));
-		this.bodies.push(new Body("jupiter", new Vec2D(0, 2000), new Vec2D(-700, 0), 2000, 8, "#F85"));
+		this.bodies.push(new Body("earth", new Vec2D(800, 0), new Vec2D(0, 1100), 1000000, 5, "#25E"));
+		this.bodies.push(new Body("mars", new Vec2D(-1300, 0), new Vec2D(0, -800), 200000, 3, "#E22"));
+		this.bodies.push(new Body("mercury", new Vec2D(0, -300), new Vec2D(1500, 0), 100000, 3, "#999"));
+		this.bodies.push(new Body("jupiter", new Vec2D(0, 2000), new Vec2D(-700, 0), 20000000, 8, "#F85"));
 		
 		this.interact();
 		this.plot();
@@ -41,23 +41,21 @@ class Universe {
 	// To keep a reasonable display refreshing rate, a display iteration is made of a multiple physics iteration
 	next() {
 		if(this.paused == false) {
-			for(let i=0; i < this.displayPeriod / this.physicsPeriod; i++) {
+			for(var i = 0; i < this.physicsLoopPeriod / this.physicsPeriod ; i++) {
 				this.time += this.physicsPeriod;
 				this.interact();
 			}
-			
-			this.plot();
-			
-			this.updateConservedProperties();
-			this.updatePhysicsPeriod(this.checkPhysics());
 		}
 	}
 	
 	plot() {
-		updateOldBodies();
-		this.bodies.forEach(body => {
-			plotBody(body);
-		});
+		if(this.paused == false) {
+			updateOldBodies();
+			this.bodies.forEach(body => plotBody(body));
+				
+			this.updateConservedProperties();
+			this.updatePhysicsPeriod(this.checkPhysics());
+		}
 	}
 	
 	interact() {
@@ -172,17 +170,19 @@ class Universe {
 class Interaction {
 	constant = 1;
 	vector;
-	distance;
+	//distance;
+	distanceInv;
 	masses;
 	
 	constructor(vector, masses) {
 		this.vector = vector;
 		this.masses = masses;
-		this.distance = vector.distance();
+		//this.distance = vector.distance();
+		this.distanceInv = 1 / vector.distance();
 	}
 	
 	energy() {
-		var energy = - this.constant * this.masses / this.distance;
+		var energy = - this.constant * this.masses * this.distanceInv;
 		return energy;
 	}
 }

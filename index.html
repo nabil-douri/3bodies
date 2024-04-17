@@ -21,16 +21,21 @@
 		<script>
 			const displayFrequency = 50;
 			const physicsFrequency = 10e3;
+			const physicsLoopFrequency = 100;
 			const universeSize = 5000;
 			
-			let universe = new Universe(1 / physicsFrequency, 1 / displayFrequency, universeSize);
+			let universe = new Universe(1 / physicsFrequency, 1 / physicsLoopFrequency, universeSize);
 			universe.initialize();
 			//console.log(universe);
 			
 			setInterval(function() {
+				universe.next();
+			}, 1000 / physicsLoopFrequency);
+			
+			setInterval(function() {
 				const start = Date.now();
 			
-				universe.next();
+				universe.plot();
 				
 				const t = (Date.now() - start) / 1000;
 				const displayF = 1 / t;

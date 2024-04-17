@@ -38,9 +38,9 @@ class Body
 	computeForce() {
 		this.force = new Vec2D(0, 0);
 		this.interactions.forEach(interaction => {
-			var intensity = interaction.constant * interaction.masses / (interaction.distance * interaction.distance);
-			this.force.x += (interaction.vector.x / interaction.distance) * intensity;
-			this.force.y += (interaction.vector.y / interaction.distance) * intensity;
+			var intensity = interaction.constant * interaction.masses * interaction.distanceInv * interaction.distanceInv;
+			this.force.x += interaction.vector.x * interaction.distanceInv * intensity;
+			this.force.y += interaction.vector.y * interaction.distanceInv * intensity;
 		});
 	}
 	
