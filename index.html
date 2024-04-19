@@ -19,8 +19,8 @@
 		</div>
 		
 		<script>
-			const displayFrequency = 50;
-			const physicsFrequency = 10e3;
+			const displayFrequency = 100;
+			const physicsFrequency = 100e3;
 			const physicsLoopFrequency = 100;
 			const universeSize = 5000;
 			
@@ -41,7 +41,7 @@
 				const displayF = 1 / t;
 				const physicsF = (physicsFrequency / displayFrequency) / t;
 				console.log("Display : " + displayF + " Hz\nPhysics : " + physicsF + " Hz\nPhysics Period : " + universe.physicsPeriod + "\nTotal energy : " + universe.totalEnergy.currentValue);
-				//console.log(universe);
+				console.log(universe);
 			}, 1000 / displayFrequency);
 
 		</script>

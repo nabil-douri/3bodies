@@ -12,6 +12,7 @@ class Universe {
 	totalEnergy;
 	physicsInconsistency = 0.001;
 	paused = false;
+	oldBodiesMaxLength = 100;
 	
 	constructor(physicsPeriod, physicsLoopPeriod, size) {
 		this.physicsPeriod = physicsPeriod;
@@ -32,6 +33,8 @@ class Universe {
 		this.bodies.push(new Body("jupiter", new Vec2D(0, 2000), new Vec2D(-700, 0), new Vec2D(0, 0), 20000000, 8, "#F85"));
 		this.bodies.push(new Body("satellite", new Vec2D(-1700, 2650), new Vec2D(0, -500), new Vec2D(0, 0), 10, 8, "#5E5"));
 		
+		this.oldBodiesMaxLength *= this.bodies.length;
+		
 		this.interact();
 		this.plot();
 		
@@ -46,13 +49,21 @@ class Universe {
 				this.time += this.physicsPeriod;
 				this.interact();
 			}
+			
+			this.bodies.forEach(body => {
+				this.oldBodies.push(body);
+				if(this.oldBodies.length > this.oldBodiesMaxLength) {
+					this.oldBodies.shift();
+				}
+			});
 		}
 	}
 	
 	plot() {
 		if(this.paused == false) {
-			updateOldBodies();
-			this.bodies.forEach(body => plotBody(body));
+			//updateOldBodies();
+			plotTrajectories(this.bodies, this.oldBodies);
+			plotBodies(this.bodies);
 				
 			this.updateConservedProperties();
 			this.updatePhysicsPeriod(this.checkPhysics());
@@ -78,7 +89,6 @@ class Universe {
 			const newBody = body.next(this.physicsPeriod);
 			newBody.interactions = body.interactions;
 			newBodies.push(newBody);
-			//this.oldBodies.push(body);
 		});
 		
 		this.bodies = newBodies;

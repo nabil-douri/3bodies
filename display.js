@@ -27,18 +27,72 @@ function updateOldBodies() {
 	});
 }
 
-function plotBody(body) {
-	positionDisplay = UniverseToDisplayCoordinates(body.position);
-	//console.log(body.position, positionDisplay);
+function plotTrajectories(bodies, oldBodies) {
+	var children = Array.from(document.getElementById('main').getElementsByTagName('path'));
+	children.forEach(el => { el.remove(); });
 	
-	var svgns = "http://www.w3.org/2000/svg", svg = document.getElementById("main");
-	var circle = document.createElementNS(svgns, 'circle');
-	circle.setAttributeNS(null, 'id', body.id + "_t" + universe.time);
-	circle.setAttributeNS(null, 'cx', positionDisplay.x);
-	circle.setAttributeNS(null, 'cy', positionDisplay.y);
-	circle.setAttributeNS(null, 'r', body.radius);
-	circle.setAttributeNS(null, 'style', 'fill: ' + body.color + '; opacity:1; filter: brightness(2);' );
-	svg.appendChild(circle);
+	bodies.forEach(body => {
+		var svgns = "http://www.w3.org/2000/svg", svg = document.getElementById("main");
+		var path = document.createElementNS(svgns, 'path');
+		path.setAttributeNS(null, 'id', body.id + '_path');
+		path.setAttributeNS(null, 'stroke', body.color);
+		path.setAttributeNS(null, 'stroke-width', 2);
+		path.setAttributeNS(null, 'fill', 'transparent');
+		path.setAttributeNS(null, 'style', 'opacity:0.5; filter: brightness(1);' );
+		
+		var pathArray = [];
+		var i = 0;
+		
+		oldBodies.filter(oldBody => oldBody.id == body.id).forEach(oldBody => {
+			positionDisplay = UniverseToDisplayCoordinates(oldBody.position);
+		
+			if(i == 0) {
+				pathArray.push("M");
+				pathArray.push(positionDisplay.x);
+				pathArray.push(positionDisplay.y);
+			}
+			// else if(i == 1) {
+				// pathArray.push("Q");
+				// pathArray.push(positionDisplay.x);
+				// pathArray.push(positionDisplay.y);
+			// }
+			// else if(i == 2) {
+				// pathArray.push(",");
+				// pathArray.push(positionDisplay.x);
+				// pathArray.push(positionDisplay.y);
+			// }
+			else {
+				pathArray.push("L");
+				pathArray.push(positionDisplay.x);
+				pathArray.push(positionDisplay.y);
+			}
+			
+			i++;
+		});
+		
+		path.setAttributeNS(null, 'd', pathArray.join(' '));
+		svg.appendChild(path);
+	});
+}
+
+function plotBodies(bodies) {
+	var children = Array.from(document.getElementById('main').getElementsByTagName('circle'));
+	children.forEach(el => { el.remove(); });
+	
+	bodies.forEach(body => {
+		positionDisplay = UniverseToDisplayCoordinates(body.position);
+		//console.log(body.position, positionDisplay);
+		
+		var svgns = "http://www.w3.org/2000/svg", svg = document.getElementById("main");
+		var circle = document.createElementNS(svgns, 'circle');
+		circle.setAttributeNS(null, 'id', body.id + "_t" + universe.time);
+		circle.setAttributeNS(null, 'cx', positionDisplay.x);
+		circle.setAttributeNS(null, 'cy', positionDisplay.y);
+		circle.setAttributeNS(null, 'r', body.radius);
+		circle.setAttributeNS(null, 'fill', body.color);
+		circle.setAttributeNS(null, 'style', 'opacity:1; filter: brightness(2);' );
+		svg.appendChild(circle);
+	});
 	
 	// var container = document.getElementById("main");
 	// var circle = document.createElement("span");
