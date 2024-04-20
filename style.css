@@ -32,3 +32,11 @@ body {
 	font-size: 1.8em;
 	display: block;
 }
+
+.stats {
+	position: fixed;
+	top: 5px;
+	right: 10px;
+	color: #DDD;
+	font-size: 1em;
+}

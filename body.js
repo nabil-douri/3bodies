@@ -22,6 +22,7 @@ class Body
 	force;
 	interactions = [];
 	mass;
+	massInv;
 	color;
 	radius;
 	
@@ -31,16 +32,17 @@ class Body
 		this.velocity = initialVelocity;
 		this.acceleration = initialAcceleration;
 		this.mass = mass;
+		this.massInv = 1 / mass;
 		this.color = color;
 		this.radius = radius;
 	}
 	
 	computeForce() {
-		this.force = new Vec2D(0, 0);
+		this.force = new Vec2D(0.0, 0.0);
 		this.interactions.forEach(interaction => {
-			var intensity = interaction.constant * interaction.masses * interaction.distanceInv * interaction.distanceInv;
-			this.force.x += interaction.vector.x * interaction.distanceInv * intensity;
-			this.force.y += interaction.vector.y * interaction.distanceInv * intensity;
+			var intensity = interaction.constant * interaction.masses * Math.pow(interaction.distanceInv, 3);
+			this.force.x += interaction.vector.x * intensity;
+			this.force.y += interaction.vector.y * intensity;
 		});
 	}
 	
@@ -50,9 +52,9 @@ class Body
 	
 	next(dt) {
 		this.computeForce();
-		var newAcceleration = new Vec2D(this.force.x / this.mass, this.force.y / this.mass);
-		var newVelocity = new Vec2D(this.velocity.x + 1 * (newAcceleration.x) * dt, this.velocity.y + 1 * (newAcceleration.y) * dt);
-		var newPosition = new Vec2D(this.position.x + 1 * (newVelocity.x) * dt, this.position.y + 1 * (newVelocity.y) * dt);
+		var newAcceleration = new Vec2D(this.force.x * this.massInv, this.force.y * this.massInv);
+		var newVelocity = new Vec2D(this.velocity.x + (newAcceleration.x) * dt, this.velocity.y + (newAcceleration.y) * dt);
+		var newPosition = new Vec2D(this.position.x + (newVelocity.x) * dt, this.position.y + (newVelocity.y) * dt);
 		
 		return new Body(this.id, newPosition, newVelocity, newAcceleration, this.mass, this.radius, this.color);
 	}

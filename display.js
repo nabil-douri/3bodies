@@ -92,20 +92,9 @@ function plotBodies(bodies) {
 		circle.setAttributeNS(null, 'fill', body.color);
 		circle.setAttributeNS(null, 'style', 'opacity:1; filter: brightness(2);' );
 		svg.appendChild(circle);
+		//console.log("Plotting a body at x=" + positionDisplay.x + ", y=" + positionDisplay.y + ", color=" + body.color);
 	});
 	
-	// var container = document.getElementById("main");
-	// var circle = document.createElement("span");
-	// circle.setAttribute("id", body.id + "_t" + universe.time);
-	// circle.setAttribute("class", "dot");
-	// circle.style.left = positionDisplay.x + "px";
-	// circle.style.top = positionDisplay.y + "px";
-	// circle.style.backgroundColor = body.color;
-	// circle.style.opacity = body.opacity;
-	// container.appendChild(circle);
-	
-	
-	//console.log("Plotting a body at x=" + positionDisplay.x + ", y=" + positionDisplay.y + ", color=" + body.color);
 }
 
 function zoom(newScale) {
