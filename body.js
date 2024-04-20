@@ -1,4 +1,6 @@
 class Vec2D {
+	#norm;
+	
 	constructor(x, y) {
 		this.x = x;
 		this.y = y;
@@ -8,7 +10,7 @@ class Vec2D {
 		return new Vec2D(- this.x, - this.y);
 	}
 	
-	distance() {
+	get norm() {
 		return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
 	}
 }
@@ -53,8 +55,10 @@ class Body
 	next(dt) {
 		this.computeForce();
 		var newAcceleration = new Vec2D(this.force.x * this.massInv, this.force.y * this.massInv);
-		var newVelocity = new Vec2D(this.velocity.x + (newAcceleration.x) * dt, this.velocity.y + (newAcceleration.y) * dt);
-		var newPosition = new Vec2D(this.position.x + (newVelocity.x) * dt, this.position.y + (newVelocity.y) * dt);
+		var newVelocity = new Vec2D(this.velocity.x + (newAcceleration.x) / 2 * dt, this.velocity.y + (newAcceleration.y) / 2 * dt);		
+		var newPosition = new Vec2D(this.position.x + (newVelocity.x) / 2 * dt, this.position.y + (newVelocity.y) / 2 * dt);
+		
+		//var refinedVelocity = new Vec2D(this.velocity.x + this.newVelocity
 		
 		return new Body(this.id, newPosition, newVelocity, newAcceleration, this.mass, this.radius, this.color);
 	}

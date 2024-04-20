@@ -108,7 +108,7 @@ function zoom(newScale) {
 }
 
 window.addEventListener("wheel", event => {
-	scale = (1 - event.deltaY * 0.001);
+	scale = (1 - event.deltaY * 0.002);
 	zoom(scale);
 });
 

@@ -13,25 +13,27 @@ class Universe {
 	physicsInconsistency = 0.001;
 	paused = false;
 	oldBodiesMaxLength = 100;
+	timeStep;
 	
-	constructor(physicsPeriod, physicsLoopPeriod, size) {
+	constructor(physicsPeriod, physicsLoopPeriod, timeStep, size) {
 		this.physicsPeriod = physicsPeriod;
 		this.initialPhysicsPeriod = physicsPeriod;
 		this.physicsLoopPeriod = physicsLoopPeriod;
+		this.timeStep = timeStep;
 		this.size = size;
 	}
 	
 	initialize() {
-		// this.bodies.push(new Body("body0", new Vec2D(10, 0), new Vec2D(0, 0), new Vec2D(0, 0), 1000, 3, "#52E"));
-		// this.bodies.push(new Body("body1", new Vec2D(900, 0), new Vec2D(0, 0.8), new Vec2D(0, 0), 1000, 3, "#E52"));
-		// this.bodies.push(new Body("body2", new Vec2D(-700, 0), new Vec2D(0, -1), new Vec2D(0, 0), 1000, 3, "#5E2"));
+		this.bodies.push(new Body("body0", new Vec2D(1000, 0), new Vec2D(0, -200), new Vec2D(0, 0), 100000000, 5, "#52E"));
+		this.bodies.push(new Body("body1", new Vec2D(-1000, 0), new Vec2D(0, 200), new Vec2D(0, 0), 100000000, 5, "#E52"));
+		this.bodies.push(new Body("body2", new Vec2D(0, 0), new Vec2D(-15, 25), new Vec2D(0, 0), 100000000, 5, "#5E2"));
 		
-		this.bodies.push(new Body("sun", new Vec2D(0, 0), new Vec2D(20, 0), new Vec2D(0, 0), 1000000000, 15, "#EE1"));
-		this.bodies.push(new Body("earth", new Vec2D(800, 0), new Vec2D(0, 1100), new Vec2D(0, 0), 100000, 5, "#25E"));
-		this.bodies.push(new Body("mars", new Vec2D(-1300, 0), new Vec2D(0, -800), new Vec2D(0, 0), 20000, 3, "#E22"));
-		this.bodies.push(new Body("mercury", new Vec2D(0, -300), new Vec2D(1500, 0), new Vec2D(0, 0), 10000, 3, "#999"));
-		this.bodies.push(new Body("jupiter", new Vec2D(0, 2000), new Vec2D(-700, 0), new Vec2D(0, 0), 20000000, 8, "#F85"));
-		this.bodies.push(new Body("satellite", new Vec2D(-1700, 2000), new Vec2D(0, -300), new Vec2D(0, 0), 10, 8, "#5E5"));
+		// this.bodies.push(new Body("sun", new Vec2D(0, 0), new Vec2D(14, 0), new Vec2D(0, 0), 1000000000, 15, "#EE1"));
+		// this.bodies.push(new Body("earth", new Vec2D(800, 0), new Vec2D(0, 1100), new Vec2D(0, 0), 100000, 5, "#25E"));
+		// this.bodies.push(new Body("mars", new Vec2D(-1300, 0), new Vec2D(0, -800), new Vec2D(0, 0), 20000, 3, "#E22"));
+		// this.bodies.push(new Body("mercury", new Vec2D(0, -300), new Vec2D(1500, 0), new Vec2D(0, 0), 10000, 3, "#999"));
+		// this.bodies.push(new Body("jupiter", new Vec2D(0, 2000), new Vec2D(-700, 0), new Vec2D(0, 0), 20000000, 8, "#F85"));
+		// this.bodies.push(new Body("satellite", new Vec2D(-1700, 2000), new Vec2D(0, -300), new Vec2D(0, 0), 10, 8, "#5E5"));
 		
 		this.oldBodiesMaxLength *= this.bodies.length;
 		
@@ -86,7 +88,7 @@ class Universe {
 		
 		var newBodies = [];
 		this.bodies.forEach(body => {
-			const newBody = body.next(this.physicsPeriod);
+			const newBody = body.next(this.timeStep);
 			newBody.interactions = body.interactions;
 			newBodies.push(newBody);
 		});
@@ -161,7 +163,7 @@ class Universe {
 	getKineticEnergy() {
 		var energy = 0;
 		this.bodies.forEach(body => {
-			energy += Math.pow(body.velocity.distance(), 2) * body.mass * 0.5;
+			energy += Math.pow(body.velocity.norm, 2) * body.mass * 0.5;
 		});
 		return energy;
 	}
@@ -188,8 +190,8 @@ class Interaction {
 	constructor(vector, masses) {
 		this.vector = vector;
 		this.masses = masses;
-		//this.distance = vector.distance();
-		this.distanceInv = 1 / vector.distance();
+		//this.distance = vector.norm;
+		this.distanceInv = 1 / vector.norm;
 	}
 	
 	energy() {
@@ -201,7 +203,7 @@ class Interaction {
 class ConservedProperty {
 	initialValue;
 	currentValue;
-	error;
+	#error;
 	
 	constructor(value) {
 		this.initialValue = value;
